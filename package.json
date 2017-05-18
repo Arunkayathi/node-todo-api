@@ -10,6 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "assert": "^1.4.1",
-    "mongodb": "^2.2.25"
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "mongodb": "^2.2.25",
+    "mongoose": "^4.9.5"
   }
 }
