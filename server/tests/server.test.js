@@ -6,10 +6,13 @@ const {Todo} = require('./../models/todo');
 const {ObjectID}=require('mongodb');
 const todos=[{
     _id: new ObjectID(),
-    text:"First test todo"
+    text:"first test todo",
+
 },{
     _id: new ObjectID(),
-    text:"second test todo"
+    text:"second test todo",
+    completed:true,
+    completedAt:333
 }];
 beforeEach((done)=>{
     Todo.remove({}).then(()=>{
@@ -19,7 +22,6 @@ beforeEach((done)=>{
 describe('POST /todos',()=>{
     it('should create  a new todo',(done)=>{
         var text="This is my new todo";
-
         request(app)
         .post('/todos')
         .send({text})
@@ -133,3 +135,43 @@ describe('GET /todos/id',()=>{
             .end(done);
         });
     });
+
+describe('PATCH /todos/:id',()=>{
+
+        it('Should update the todo',(done)=>{
+        var id=todos[0]._id.toHexString();
+        var text="updated text!!!!!!";
+        request(app)
+        .patch(`/todos/${id}`)
+        .send({
+            text,
+            completed:true
+        })
+        .expect(200)
+        .expect((res)=>{
+            expect(res.body.todo.text).toBe(text);
+            expect(res.body.todo.completed).toBe(true);
+            expect(res.body.todo.completedAt).toBeA('number');
+        })
+        .end(done);
+        });
+
+        it('should clear the completedAt when todo is not completed',(done)=>{
+            var id=todos[1]._id.toHexString();
+            var text="This is my second updated text !!!!";
+            request(app)
+            .patch(`/todos/${id}`)
+            .send({
+                text,
+                completed:false
+            })
+            .expect(200)
+            .expect((res)=>{
+                expect(res.body.todo.text).toBe(text);
+                expect(res.body.todo.completed).toBe(false);
+                expect(res.body.todo.completedAt).toNotExist();
+            })
+            .end(done);
+        });
+
+});
