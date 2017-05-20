@@ -9,8 +9,8 @@ var todoSchema=new mongoose.Schema({
     completed:{type:Boolean,default:false},
     createdAt:{type:Date,default:Date.now},
     completedAt:{
-        type:Number,
-        default:null
+        type: Number,
+        default: null
     }
 });
 
